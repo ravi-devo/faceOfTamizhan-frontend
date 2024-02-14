@@ -2,15 +2,27 @@ import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logOut } from "../../slices/authSlice";
+import { useLogoutMutation } from "../../slices/usersApiSlice";
+import { toast } from 'react-toastify';
+
 const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const logOutHandler = () => {
+
+    const [ LogoutAPI ] = useLogoutMutation();
+
+    const logOutHandler = async () => {
         try {
-            dispatch(logOut());
-            navigate('/');
+            const res = await LogoutAPI().unwrap();
+            if(res.message === "Logout successful.") {
+                console.log(`Came in`)
+                dispatch(logOut());
+                navigate('/');
+            }else{
+                toast.error(`Cannot log you out.`)
+            }
         } catch (error) {
-            console.log(`Error: ${error}`)
+            toast.error(`Error: ${error}`)
         }
     }
     return (
