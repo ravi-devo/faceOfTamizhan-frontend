@@ -38,10 +38,13 @@ const Login = () => {
   };
 
   return (
-    <div className="justify-content-center vh-100">
-      <Container style={{ backgroundColor: 'yellow', padding: '20px' }}>
+
+    <Container>
+      <h3 className='my-3'>Face-Of-Tamizhan</h3>
+      <div className='p-2 my-5'>
+        <h2 className='my-4'>Login to your account</h2>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className='my-2' controlId="formBasicEmail">
+          <Form.Group className='my-2 col-md-5' controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control
               type="email"
@@ -51,7 +54,7 @@ const Login = () => {
             />
           </Form.Group>
 
-          <Form.Group className='my-2' controlId="formBasicPassword">
+          <Form.Group className='my-2 col-md-5' controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control
               type="password"
@@ -61,17 +64,20 @@ const Login = () => {
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
+          <Row className='py-1'>
+            <Col>
+              New here? <Link to='/register'>Register</Link>
+            </Col>
+          </Row>
+          <Button className='px-5 mt-3' variant="primary" type="submit">
             Login
           </Button>
         </Form>
-        <Row className='py-3'>
-          <Col>
-            New Customer? <Link to='/register'>Register</Link>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+      </div>
+
+
+    </Container>
+
   );
 };
 
