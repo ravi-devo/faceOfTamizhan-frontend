@@ -9,6 +9,8 @@ import Register from './components/register/register.jsx';
 import { Provider } from 'react-redux';
 import store from './store.js';
 import Home from './components/Home/home.jsx';
+import PostComponent from './components/Posts/postComponent.jsx';
+import Post from './components/Posts/posts.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -16,6 +18,8 @@ const router = createBrowserRouter(
       <Route index={true} path='/' element={<Login />} />
       <Route path='/register' element={<Register />} />
       <Route path='/home' element={<Home />} />
+      <Route path='/postComponent' element={<PostComponent />} />
+      <Route path='/post' element={<Post />} />
     </Route>
   )
 )

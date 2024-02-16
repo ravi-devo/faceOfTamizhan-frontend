@@ -1,42 +1,25 @@
 import { Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { logOut } from "../../slices/authSlice";
-import { useLogoutMutation } from "../../slices/usersApiSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from 'react-toastify';
 import { useCreatePostMutation, useGetPostMutation, useAddCommentMutation, useDeleteCommentMutation, useDeletePostMutation } from "../../slices/postApiSlice";
 import { setInitialPost, createPost, addComment, deleteComment, deletePost } from "../../slices/postSlice";
 import { useEffect } from "react";
+import Header from "../NavBar/navbar";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const [LogoutAPI] = useLogoutMutation();
+    const dispatch = useDispatch();
     const [GetPost] = useGetPostMutation();
     const [CreatePostAPI] = useCreatePostMutation();
     const [AddCommentAPI] = useAddCommentMutation();
     const [DeleteCommentAPI] = useDeleteCommentMutation();
     const [DeletePostAPI] = useDeletePostMutation();
-
-    const logOutHandler = async () => {
-        try {
-            const res = await LogoutAPI().unwrap();
-            if (res.message === "Logout successful.") {
-                console.log(`Came in`)
-                dispatch(logOut());
-                navigate('/');
-            } else {
-                toast.error(`Cannot log you out.`)
-            }
-        } catch (error) {
-            toast.error(`Error: ${error}`)
-        }
-    }
+    const postItems = useSelector((state) => state.post.postItems);
 
     const createPostHandler = async () => {
         try {
-            const res = await CreatePostAPI({ title: "From UI 2", content: "Content from UI" }).unwrap();
+            const res = await CreatePostAPI({ title: "Can we see it without refreshing the page", content: "Content from UI" }).unwrap();
             console.log(`Response ${JSON.stringify(res)}`)
             if (res.message === 'Post Created successfully') {
                 console.log(`Post created successfully`)
@@ -76,7 +59,7 @@ const Home = () => {
         }
     }
     const deletePostHandler = async () => {
-        const postId = '65c8c410fd1446c348d45f47';
+        const postId = '65c8c61a6707301cd32f486e';
         try {
             const res = await DeletePostAPI(postId).unwrap();
             console.log(`Response ${JSON.stringify(res)}`)
@@ -87,6 +70,10 @@ const Home = () => {
         } catch (error) {
             toast.error(`Internal server error ${JSON.stringify(error)}`)
         }
+    }
+
+    const navigateToPost = () => {
+        navigate('/post');
     }
 
     useEffect(() => {
@@ -105,12 +92,22 @@ const Home = () => {
     }, []);
     return (
         <div>
+            <Header />
             <h1>Welcome to home screen, you are now logged in.</h1>
-            <Button className="mx-2" onClick={logOutHandler}>Log out</Button>
             <Button className="mx-2" onClick={createPostHandler}>Create Post</Button>
             <Button className="mx-2" onClick={addCommentHandler}>Add Comment</Button>
             <Button className="mx-2" onClick={deleteCommentHandler}>Delete Comment</Button>
             <Button className="mx-2" onClick={deletePostHandler}>Delete Post</Button>
+            <Button className="mx-2" onClick={navigateToPost}>Post Page</Button>
+            {/* Render fetched posts */}
+            <div>
+                {postItems.map(post => (
+                    <div key={post.id}>
+                        <h2>{post.title}</h2>
+                        <p>{post.content}</p>
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }

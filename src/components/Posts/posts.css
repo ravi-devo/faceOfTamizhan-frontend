@@ -1,0 +1,54 @@
+.circular-avatar{
+    height: 2.4em;
+    width: 2.4em;
+    background-color:aqua;
+    border: 1 solid black;
+    border-radius: 1.2em;
+    text-align: center;
+    padding-top: .4em;
+    display: inline-block;
+}
+
+.divider {
+    height: 1px;
+    width:80%;
+    display: block; /* for use on default inline elements like span */
+    margin: .5em;
+    overflow: hidden;
+    background-color: #e5e5e5;
+    margin-left: 1.5em;    
+  }
+
+  .class-1{
+    background-color: grey;
+    color: white;
+    border: 1px solid grey;
+    border-radius: .5em;
+    height: 50vh;
+    overflow-y: auto;
+  }
+
+  .class-2{
+    background-color: brown;
+  }
+
+  .createPost-space{
+    background-color: grey;
+    color: white;
+    border: 1px solid grey;
+    border-radius: .5em;
+  }
+
+  .postSpace{
+    background-color: grey;
+    color: white;
+  }
+
+  .class-3{
+    background-color: grey;
+    color: white;
+    border: 1px solid grey;
+    border-radius: .5em;
+    height: 50vh;
+    overflow-y: auto;
+  }
