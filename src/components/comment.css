@@ -1,0 +1,27 @@
+.comment-card{
+    background-color: grey;
+    color: white;
+    max-height: 200px; /* Adjust the height as per your requirement */
+    overflow-y: auto;
+}
+
+.title{
+    font-size: smaller;
+}
+
+.subtitle{
+    font-size: small;
+}
+
+.comment-avatar{
+    height: 2em;
+    width: 2em;
+    background-color:aqua;
+    border: 1 solid black;
+    border-radius: 1em;
+    text-align: center;
+    padding-top: .2em;
+    display: inline-block;
+}
+
+  

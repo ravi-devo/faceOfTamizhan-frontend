@@ -11,6 +11,7 @@ import { createPost, setInitialPost } from "../../slices/postSlice";
 import { toast } from 'react-toastify';
 import { useCreatePostMutation, useGetPostMutation } from "../../slices/postApiSlice";
 import Avatar from "../avatar";
+import Loader from "../loader";
 
 const Post = () => {
 
@@ -18,7 +19,7 @@ const Post = () => {
     const [joinedTime, setJoinedTime] = useState('');
     const dispatch = useDispatch();
     const [CreatePostAPI] = useCreatePostMutation();
-    const [GetPost] = useGetPostMutation();
+    const [GetPost, {isLoading}] = useGetPostMutation();
     const { postItems } = useSelector((state) => state.post);
     const { userInfo } = useSelector((state) => state.auth);
 
@@ -120,11 +121,12 @@ const Post = () => {
                             </Form>
                         </div>
                         <div className="d-flex justify-content-end mt-1 mb-3 px-3">
-                            <Button onClick={createPostHandler} className="px-3" variant="primary">
+                            <Button disabled={isLoading} onClick={createPostHandler} className="px-3" variant="primary">
                                 Post
                             </Button>
                         </div>
                     </div>
+                    {isLoading && <Loader />}
                     {!postItems.length ? <div className="d-flex justify-content-center p-5"> <h6>No Post, post some here...</h6> </div> : memoizedPostComponents}
                 </Col>
                 <Col md={3} className="class-3 my-3 pb-3">

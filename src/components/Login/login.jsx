@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLoginMutation } from '../../slices/usersApiSlice';
 import { setCredential } from '../../slices/authSlice';
 import { toast } from 'react-toastify';
+import Loader from '../loader';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -28,7 +29,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
-      if(res.message === 'User authenticated successfully'){
+      if (res.message === 'User authenticated successfully') {
         dispatch(setCredential({ ...res }));
         navigate('/home');
       }
@@ -71,10 +72,11 @@ const Login = () => {
               New here? <Link to='/register'>Register</Link>
             </Col>
           </Row>
-          <Button className='px-5 mt-3' variant="primary" type="submit">
+          <Button className='px-5 mt-3' disabled={isLoading} variant="primary" type="submit">
             Login
           </Button>
         </Form>
+        {isLoading && <Loader />}
       </div>
 
 

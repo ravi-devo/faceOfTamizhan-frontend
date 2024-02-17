@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { useDispatch } from "react-redux";
 import { setCredential } from "../../slices/authSlice";
+import Loader from "../loader";
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ const Register = () => {
     const [city, setCity] = useState('');
     const [country, setCountry] = useState('')
 
-    const [Register] = useRegisterMutation();
+    const [Register, {isLoading}] = useRegisterMutation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -90,6 +91,7 @@ const Register = () => {
                                 <Form.Control value={city} placeholder="Enter your city" onChange={(e) => setCity(e.target.value)} />
                             </Form.Group>
                         </Col>
+                        {isLoading && <Loader />}
                         <Col>
                             <Form.Group className="my-2 col-md-10" controlId="countryControlId">
                                 <Form.Label>
@@ -104,7 +106,7 @@ const Register = () => {
                             Already Registered? <Link to='/'>Login</Link>
                         </Col>
                     </Row>
-                    <Button className='px-5 mt-3' type="submit">Sign Up</Button>
+                    <Button className='px-5 mt-3' disabled={isLoading} type="submit">Sign Up</Button>
                 </Form>
             </div>
 
