@@ -4,10 +4,31 @@ import { FaRegCommentAlt } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import PropTypes from 'prop-types';
 import { useState } from "react";
+import { useLikeMutation, useDislikeMutation } from "../../slices/postApiSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { dislikePost, likePost } from "../../slices/postSlice";
 
 const PostComponent = ({ post }) => {
-    const [liked, setLiked] = useState(false);
-    const handleLike = () => {
+
+    const { userInfo } = useSelector((state) => state.auth);
+    const currentUserId = userInfo.data._id;
+    const [liked, setLiked] = useState(post.likes.includes(currentUserId));
+    const [likeAPI] = useLikeMutation();
+    const [disLikeAPI] = useDislikeMutation();
+    const dispatch = useDispatch();
+
+    const handleLike = async () => {
+        if (liked) {
+            const res = await disLikeAPI(post._id).unwrap();
+            if (res.message === 'Post disliked successfully') {
+                dispatch(dislikePost({ postId: post._id, userId: currentUserId }));
+            }
+        } else {
+            const res = await likeAPI(post._id).unwrap();
+            if (res.message === 'Post liked successfully') {
+                dispatch(likePost({ postId: post._id, userId: currentUserId }));
+            }
+        }
         setLiked(!liked);
     }
     return (
@@ -27,7 +48,7 @@ const PostComponent = ({ post }) => {
                 </Card.Text>
             </Card.Body>
             <Card.Footer className="d-flex justify-content-between">
-                <div><AiFillLike onClick={handleLike} color={liked ? 'blue' : 'white'} size={20} /><span className="mx-1">{liked ? 'Liked' : 'Like'}</span></div>
+                <div><AiFillLike onClick={handleLike} color={liked ? 'blue' : 'white'} size={20} /><span className="mx-1">{post.likes.length} Likes</span></div>
                 <div><FaRegCommentAlt /><span className="mx-2">Comment</span></div>
                 <div><MdDeleteOutline size={22} /><span className="mx-1">Delete</span></div>
             </Card.Footer>

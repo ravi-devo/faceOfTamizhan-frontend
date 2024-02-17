@@ -31,6 +31,16 @@ const postSlice = createSlice({
             const post = state.postItems.find(post => post._id === postId);
             if (post) post.comments = post.comments.filter(comment => comment._id !== commentId);
         },
+        likePost: (state, action) => {
+            const { postId, userId } = action.payload;
+            const post = state.postItems.find(post => post._id === postId);
+            if(post) post.likes.unshift(userId);
+        },
+        dislikePost: (state, action) => {
+            const { postId, userId } = action.payload;
+            const post = state.postItems.find(post => post._id === postId);
+            if(post) post.likes = post.likes.filter(likedId => likedId != userId);
+        }
     }
 })
 
@@ -40,7 +50,9 @@ export const {
     getMyPost,
     deletePost,
     addComment,
-    deleteComment
+    deleteComment,
+    likePost,
+    dislikePost
 } = postSlice.actions;
 
 export default postSlice.reducer;
