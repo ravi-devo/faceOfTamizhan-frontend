@@ -28,8 +28,10 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
-      dispatch(setCredential({ ...res }));
-      navigate('/home');
+      if(res.message === 'User authenticated successfully'){
+        dispatch(setCredential({ ...res }));
+        navigate('/home');
+      }
     } catch (err) {
       toast.error(err?.data?.message || err.error);
       //console.log(err?.data?.message || err.error);

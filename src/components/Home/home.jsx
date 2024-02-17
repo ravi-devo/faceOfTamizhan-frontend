@@ -101,9 +101,9 @@ const Home = () => {
             <Button className="mx-2" onClick={navigateToPost}>Post Page</Button>
             {/* Render fetched posts */}
             <div>
-                {postItems.map(post => (
+                {!postItems.length ? <h6>No Post</h6> : postItems.map(post => (
                     <div key={post.id}>
-                        <h2>{post.title}</h2>
+                        <h2>{post.author.name}</h2>
                         <p>{post.content}</p>
                     </div>
                 ))}

@@ -5,22 +5,26 @@ import { CiLocationOn } from "react-icons/ci";
 import { GoBriefcase } from "react-icons/go";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import PostComponent from "./postComponent";
-import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { createPost, setInitialPost } from "../../slices/postSlice";
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useCreatePostMutation, useGetPostMutation } from "../../slices/postApiSlice";
+import Avatar from "../avatar";
 
 const Post = () => {
 
-    const [ post, setPost ] = useState('');
+    const [post, setPost] = useState('');
+    const [joinedTime, setJoinedTime] = useState('');
     const dispatch = useDispatch();
     const [CreatePostAPI] = useCreatePostMutation();
     const [GetPost] = useGetPostMutation();
+    const { postItems } = useSelector((state) => state.post);
+    const { userInfo } = useSelector((state) => state.auth);
 
     const createPostHandler = async () => {
         try {
-            const res = await CreatePostAPI({ title: "Original Post", content: post }).unwrap();
+            const res = await CreatePostAPI({ content: post }).unwrap();
             console.log(`Response ${JSON.stringify(res)}`)
             if (res.message === 'Post Created successfully') {
                 console.log(`Post created successfully`)
@@ -29,6 +33,29 @@ const Post = () => {
             }
         } catch (error) {
             toast.error(`Internal server error ${JSON.stringify(error)}`)
+        }
+    }
+
+    const calculateTimeSinceJoined = (createdAt) => {
+        const joinedDate = new Date(createdAt);
+        const currentDate = new Date();
+    
+        const diffInMilliseconds = Math.abs(currentDate - joinedDate);
+        const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
+        const diffInHours = Math.floor(diffInMilliseconds / (1000 * 60 * 60));
+        const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+        const diffInMonths = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24 * 30));
+    
+        if (diffInMonths > 0) {
+            return `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
+        } else if (diffInDays > 0) {
+            return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+        } else if (diffInHours > 0) {
+            return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+        } else if (diffInMinutes > 0) {
+            return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
+        } else {
+            return 'Just now';
         }
     }
 
@@ -45,19 +72,28 @@ const Post = () => {
             }
         }
         getPostHandler();
+
+        //Calculation of joined time
+        const timeSinceJoined = calculateTimeSinceJoined(userInfo.data.createdAt);
+        setJoinedTime(timeSinceJoined);
     }, []);
+
+    //This helps in calling the postComponent only whenever the state update in postItems.
+    const memoizedPostComponents = useMemo(() => {
+        return postItems.map(post => (
+            <PostComponent post={post} key={post._id} />
+        ));
+    }, [postItems]);
 
     return (
         <div>
             <Header />
             <Row className="d-flex justify-content-around">
                 <Col md={3} className="p-3 mt-3 class-1">
-                    <div className="circular-avatar">
-                        <p>RV</p>
-                    </div>
-                    <span className="mx-1">Ravichandran Venkatesan</span>
+                    <Avatar initial={userInfo.data.initial} />
+                    <span className="mx-1">{userInfo.data.name}</span>
                     <div className="divider"></div>
-                    <div className="m-1 px-1"><span>Joined</span></div>
+                    <Row className="d-flex px-2 justify-content-between"><Col>Joined</Col><Col>{joinedTime}</Col></Row>
                     <div className="m-1"><CiLocationOn size={25} /> <span>Chennai, India</span></div>
                     <div className="m-1 px-1"><GoBriefcase size={20} /> <span>Software Engineer</span></div>
                     <div className="divider my-3"></div>
@@ -72,16 +108,14 @@ const Post = () => {
                 <Col md={5} className="class-2 mt-3">
                     <div className="createPost-space">
                         <div className="p-2 d-flex align-items-center">
-                            <div className="circular-avatar mr-2">
-                                <p>RV</p>
-                            </div>
+                            <Avatar initial={userInfo.data.initial} />
                             <Form className="flex-grow-1 px-2">
                                 <Form.Group className="mb-0">
-                                    <Form.Control 
-                                    style={{ height: 'auto' }} 
-                                    as="textarea" value={post} 
-                                    onChange={(e) => setPost(e.target.value)} 
-                                    placeholder="What's on your mind..." />
+                                    <Form.Control
+                                        style={{ height: 'auto' }}
+                                        as="textarea" value={post}
+                                        onChange={(e) => setPost(e.target.value)}
+                                        placeholder="What's on your mind..." />
                                 </Form.Group>
                             </Form>
                         </div>
@@ -91,12 +125,8 @@ const Post = () => {
                             </Button>
                         </div>
                     </div>
-                    <PostComponent />
-                    <PostComponent />
-                    <PostComponent />
-                    
+                    {!postItems.length ? <div className="d-flex justify-content-center p-5"> <h6>No Post, post some here...</h6> </div> : memoizedPostComponents}
                 </Col>
-
                 <Col md={3} className="class-3 my-3 pb-3">
                     <Card style={{ color: "white", backgroundColor: "grey", border: "none" }}>
                         <Card.Body>
