@@ -4,9 +4,9 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useSelector, useDispatch } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { useLogoutMutation } from '../../slices/usersApiSlice';
+import { useLogoutMutation } from '../slices/userSlices/usersApiSlice';
 import { useNavigate } from 'react-router-dom';
-import { logOut } from '../../slices/authSlice';
+import { logOut } from '../slices/userSlices/authSlice';
 import { toast } from 'react-toastify';
 
 const Header = () => {

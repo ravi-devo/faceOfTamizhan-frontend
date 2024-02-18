@@ -1,6 +1,5 @@
-import { apiSlice } from "./apiSlice";
+import { apiSlice } from "../apiSlice";
 const POST_URL = 'api/posts';
-//const postId = '65c8a062a0d8b4259724a08b'
 
 export const postApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({

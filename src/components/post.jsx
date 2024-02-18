@@ -9,14 +9,14 @@ import {
     useDislikeMutation,
     useAddCommentMutation,
     useDeletePostMutation
-} from "../../slices/postApiSlice";
+} from "../slices/postSlices/postApiSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { dislikePost, likePost, addComment, deletePost } from "../../slices/postSlice";
+import { dislikePost, likePost, addComment, deletePost } from "../slices/postSlices/postSlice";
 import { toast } from 'react-toastify';
-import Avatar from "../avatar";
-import CommentsComponent from "../comment";
-import Loader from "../loader";
-import './posts.css';
+import Avatar from "./avatar";
+import CommentsComponent from "./comment";
+import Loader from "./loader";
+import '../styles/posts.css';
 
 const PostComponent = ({ post }) => {
     const { userInfo } = useSelector((state) => state.auth);

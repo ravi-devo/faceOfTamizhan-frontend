@@ -2,10 +2,10 @@ import { Card } from "react-bootstrap";
 import { MdDeleteOutline } from "react-icons/md";
 import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
-import './comment.css';
+import '../styles/comment.css';
 import { useDispatch, useSelector } from "react-redux";
-import { useDeleteCommentMutation } from "../slices/postApiSlice";
-import { deleteComment } from "../slices/postSlice";
+import { useDeleteCommentMutation } from "../slices/postSlices/postApiSlice";
+import { deleteComment } from "../slices/postSlices/postSlice";
 
 const CommentsComponent = (props) => {
     const { postId, comment } = props;

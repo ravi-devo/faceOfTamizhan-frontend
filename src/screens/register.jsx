@@ -1,12 +1,12 @@
 import { useState } from "react"
 import { Button, Container, Form, Row, Col, InputGroup } from "react-bootstrap";
 import { Link } from 'react-router-dom';
-import { useRegisterMutation } from "../../slices/usersApiSlice";
+import { useRegisterMutation } from "../slices/userSlices/usersApiSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { useDispatch } from "react-redux";
-import { setCredential } from "../../slices/authSlice";
-import Loader from "../loader";
+import { setCredential } from "../slices/userSlices/authSlice";
+import Loader from "../components/loader";
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
 const Register = () => {

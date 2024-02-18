@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col, InputGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLoginMutation } from '../../slices/usersApiSlice';
-import { setCredential } from '../../slices/authSlice';
+import { useLoginMutation } from '../slices/userSlices/usersApiSlice';
+import { setCredential } from '../slices/userSlices/authSlice';
 import { toast } from 'react-toastify';
-import Loader from '../loader';
+import Loader from '../components/loader';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
 const Login = () => {

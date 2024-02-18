@@ -1,17 +1,17 @@
-import Header from "../NavBar/navbar";
+import Header from "../components/navbar";
 import { Row, Col, Card, Form, Button } from "react-bootstrap";
-import './posts.css';
+import '../styles/posts.css';
 import { CiLocationOn } from "react-icons/ci";
 import { GoBriefcase } from "react-icons/go";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import PostComponent from "./postComponent";
+import PostComponent from "../components/post";
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createPost, setInitialPost } from "../../slices/postSlice";
+import { createPost, setInitialPost } from "../slices/postSlices/postSlice";
 import { toast } from 'react-toastify';
-import { useCreatePostMutation, useGetPostMutation } from "../../slices/postApiSlice";
-import Avatar from "../avatar";
-import Loader from "../loader";
+import { useCreatePostMutation, useGetPostMutation } from "../slices/postSlices/postApiSlice";
+import Avatar from "../components/avatar";
+import Loader from "../components/loader";
 
 const Post = () => {
 
