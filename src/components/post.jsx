@@ -26,7 +26,7 @@ const PostComponent = ({ post }) => {
     const [liked, setLiked] = useState(post.likes.includes(currentUserId));
     const [likeAPI] = useLikeMutation();
     const [disLikeAPI] = useDislikeMutation();
-    const [addCommentAPI, {isLoading}] = useAddCommentMutation();
+    const [addCommentAPI, { isLoading }] = useAddCommentMutation();
     const [deletePostAPI] = useDeletePostMutation();
     const dispatch = useDispatch();
     const [comment, setComment] = useState('');
@@ -57,14 +57,16 @@ const PostComponent = ({ post }) => {
             } else {
                 toast.error(`Error in adding comment.`)
             }
+        } else {
+            toast.error(`Comment cannot be empty`)
         }
     }
 
     const deletePostHandler = async () => {
         const res = await deletePostAPI(postId).unwrap();
-        if(res.message === 'Post deleted successfully'){
+        if (res.message === 'Post deleted successfully') {
             dispatch(deletePost(postId));
-        }else{
+        } else {
             toast.error(`Error in deleting post.`)
         }
     }
@@ -99,10 +101,11 @@ const PostComponent = ({ post }) => {
 
     //This helps in calling the postComponent only whenever the state update in postItems.
     const memoizedCommentsComponents = useMemo(() => {
-        return commentsArray.map(comment => (
+        const sortedComments = [...post.comments].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        return sortedComments.map(comment => (
             <CommentsComponent postId={postId} comment={comment} key={comment._id} />
         ));
-    }, [commentsArray, postId]);
+    }, [postId]);
 
     return (
         <Card className="postSpace mt-3">
@@ -142,7 +145,7 @@ const PostComponent = ({ post }) => {
                     </div>}
                 </div>
                 {commentExpanded && (
-                    <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                    <div className="commentExpand">
                         <Row className="d-flex justify-content-between px-2 py-3">
                             <Col className="col-10">
                                 <Form.Control
@@ -157,7 +160,7 @@ const PostComponent = ({ post }) => {
                             </Col>
                         </Row>
                         {isLoading && <Loader />}
-                        {commentsArray.length ? memoizedCommentsComponents : 'Comment is empty'}
+                        {commentsArray.length ? memoizedCommentsComponents : <p className="p-2">Be the first one to comment</p>}
                     </div>
 
                 )}

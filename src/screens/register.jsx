@@ -41,9 +41,10 @@ const Register = () => {
             if (!email) return toast.error("Email is required");
             if (!password) return toast.error("password is required");
             if (!confirmPassword) return toast.error("confirmPassword is required");
+            if (password.length < 6 || confirmPassword.length < 6) return toast.error("Password/Confirm Password should be atleast 6 characters.");
             if (password !== confirmPassword) return toast.error("Password and confirm password doesn't match.");
-            if(!city) return toast.error("City is required");
-            if(!country) return toast.error("Country is required");
+            if (!city) return toast.error("City is required");
+            if (!country) return toast.error("Country is required");
             const res = await Register({ email, firstName, lastName, password, city, country }).unwrap();
             if (res.message === 'User registered successfully') {
                 dispatch(setCredential({ ...res }));
@@ -55,8 +56,8 @@ const Register = () => {
     }
     return (
         <Container>
-            <h3 className='my-3'>Face-Of-Tamizhan</h3>
-            <div className='p-2 my-5'>
+            <h3 className='my-3 app-brand'>Face-Of-Tamizhan</h3>
+            <div className='p-2 my-3'>
                 <h2 className='my-4'>Register With Us</h2>
                 <Form onSubmit={submitHandler}>
                     <Row>
@@ -127,7 +128,7 @@ const Register = () => {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row className='py-1'>
+                    <Row className='py-1 mt-3'>
                         <Col>
                             Already Registered? <Link to='/'>Login</Link>
                         </Col>

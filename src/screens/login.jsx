@@ -25,9 +25,9 @@ const Login = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
+    //If the user logged in already it will navigate the user to login page, so that he don't have to login again.
     if (userInfo) {
       navigate('/home');
-
     }
   }, [navigate, userInfo]);
 
@@ -41,7 +41,6 @@ const Login = () => {
       }
     } catch (err) {
       toast.error(err?.data?.message || err.error);
-      //console.log(err?.data?.message || err.error);
     }
 
   };
@@ -49,7 +48,7 @@ const Login = () => {
   return (
 
     <Container>
-      <h3 className='my-3'>Face-Of-Tamizhan</h3>
+      <h3 className='my-3 app-brand'>Face-Of-Tamizhan</h3>
       <div className='p-2 my-5'>
         <h2 className='my-4'>Login to your account</h2>
         <Form onSubmit={handleSubmit}>

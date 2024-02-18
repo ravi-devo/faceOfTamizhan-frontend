@@ -1,7 +1,20 @@
+.nav-class{
+  background-color: #3e3e3e;
+}
+
+.app-brand{
+  color: #0B5ED7;
+  font-weight: bold;
+}
+
+#basic-nav-dropdown{
+  color: white;
+}
+
 .circular-avatar{
     height: 2.4em;
     width: 2.4em;
-    background-color:aqua;
+    background-color:#0B5ED7;
     border: 1 solid black;
     border-radius: 1.2em;
     text-align: center;
@@ -12,7 +25,7 @@
 .divider {
     height: 1px;
     width:80%;
-    display: block; /* for use on default inline elements like span */
+    display: block;
     margin: .5em;
     overflow: hidden;
     background-color: #e5e5e5;
@@ -20,27 +33,25 @@
   }
 
   .class-1{
-    background-color: grey;
+    background-color: #3e3e3e;
     color: white;
-    border: 1px solid grey;
     border-radius: .5em;
-    height: 50vh;
+    height: 55vh;
     overflow-y: auto;
   }
 
   .class-2{
-    background-color: brown;
+    background-color: transparent;
   }
 
   .createPost-space{
-    background-color: grey;
+    background-color: #3e3e3e;
     color: white;
-    border: 1px solid grey;
     border-radius: .5em;
   }
 
   .postSpace{
-    background-color: grey;
+    background-color: #3e3e3e;
     color: white;
   }
 
@@ -48,11 +59,22 @@
     cursor: pointer;
   }
 
-  .class-3{
-    background-color: grey;
-    color: white;
-    border: 1px solid grey;
-    border-radius: .5em;
-    height: 50vh;
+  .commentExpand{
+    max-height: 250px;
     overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .class-3{
+    background-color:#3e3e3e;
+    color: white;
+    border-radius: .5em;
+    height: 55vh;
+    overflow-y: auto;
+  }
+
+  .class-3-Card1, .class-3-Card2{
+    background-color: #3e3e3e;
+    border: none;
+    color: white;
   }

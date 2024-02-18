@@ -1,5 +1,5 @@
 import Header from "../components/navbar";
-import { Row, Col, Card, Form, Button } from "react-bootstrap";
+import { Row, Col, Card } from "react-bootstrap";
 import '../styles/posts.css';
 import { CiLocationOn } from "react-icons/ci";
 import { GoBriefcase } from "react-icons/go";
@@ -7,39 +7,19 @@ import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import PostComponent from "../components/post";
 import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createPost, setInitialPost } from "../slices/postSlices/postSlice";
+import { getMyPost } from "../slices/postSlices/postSlice";
 import { toast } from 'react-toastify';
-import { useCreatePostMutation, useGetPostMutation } from "../slices/postSlices/postApiSlice";
+import { useGetMyPostMutation } from "../slices/postSlices/postApiSlice";
 import Avatar from "../components/avatar";
 import Loader from "../components/loader";
 
-const Post = () => {
+const MyPost = () => {
 
-    const [post, setPost] = useState('');
     const [joinedTime, setJoinedTime] = useState('');
     const dispatch = useDispatch();
-    const [CreatePostAPI] = useCreatePostMutation();
-    const [GetPost, { isLoading }] = useGetPostMutation();
+    const [GetMyPost, { isLoading }] = useGetMyPostMutation();
     const { postItems } = useSelector((state) => state.post);
     const { userInfo } = useSelector((state) => state.auth);
-
-    const createPostHandler = async () => {
-        if (post.trim() != '') {
-            try {
-                const res = await CreatePostAPI({ content: post }).unwrap();
-                console.log(`Response ${JSON.stringify(res)}`)
-                if (res.message === 'Post Created successfully') {
-                    console.log(`Post created successfully`)
-                    dispatch(createPost(res.data));
-                    setPost('');
-                }
-            } catch (error) {
-                toast.error(`Internal server error ${JSON.stringify(error)}`)
-            }
-        } else {
-            toast.error(`Post cannot be empty`)
-        }
-    }
 
     const calculateTimeSinceJoined = (createdAt) => {
         const joinedDate = new Date(createdAt);
@@ -65,24 +45,22 @@ const Post = () => {
     }
 
     useEffect(() => {
-        const getPostHandler = async () => {
+        const getMyPostHandler = async () => {
             try {
-                const res = await GetPost().unwrap();
-                if (res.message === 'Posts fetched successfully') {
-                    dispatch(setInitialPost(res.data));
+                const res = await GetMyPost().unwrap();
+                if (res.message === 'Your posts fetched successfully') {
+                    dispatch(getMyPost(res.data));
                 }
             } catch (error) {
                 toast.error(`Couldn't get post`);
                 console.log(`Error ${error}`)
             }
         }
-        getPostHandler();
+        getMyPostHandler();
 
         //Calculation of joined time
-        if (userInfo.data) {
-            const timeSinceJoined = calculateTimeSinceJoined(userInfo.data.createdAt);
-            setJoinedTime(timeSinceJoined);
-        }
+        const timeSinceJoined = calculateTimeSinceJoined(userInfo.data.createdAt);
+        setJoinedTime(timeSinceJoined);
     }, []);
 
     //This helps in calling the postComponent only whenever the state update in postItems.
@@ -106,33 +84,14 @@ const Post = () => {
                     <div className="divider my-3"></div>
                     <div className="px-1">
                         <p className="m-1 px-1" style={{ fontWeight: 'bold' }}>Social Profiles</p>
-                        <div className="px-1 my-2"><FaInstagram color="white" size={20} /> <span>Instagram</span></div>
-                        <div className="px-1 my-2"><FaTwitter color="white" size={20} /> <span>Twitter</span></div>
-                        <div className="px-1 mt-2 mb-4"><FaFacebook color="white" size={20} /> <span>Facebook</span></div>
+                        <div className="px-1"><FaInstagram color="white" size={20} /> <span>Instagram</span></div>
+                        <div className="px-1"><FaTwitter color="white" size={20} /> <span>Twitter</span></div>
+                        <div className="px-1 mb-4"><FaFacebook color="white" size={20} /> <span>Facebook</span></div>
                     </div>
                 </Col>
                 <Col md={5} className="class-2 mt-3">
-                    <div className="createPost-space">
-                        <div className="p-2 d-flex align-items-center">
-                            <Avatar initial={userInfo.data.initial} />
-                            <Form className="flex-grow-1 px-2">
-                                <Form.Group className="mb-0">
-                                    <Form.Control
-                                        style={{ height: 'auto' }}
-                                        as="textarea" value={post}
-                                        onChange={(e) => setPost(e.target.value)}
-                                        placeholder="What's on your mind..." />
-                                </Form.Group>
-                            </Form>
-                        </div>
-                        <div className="d-flex justify-content-end mt-1 mb-3 px-3 pb-2">
-                            <Button disabled={isLoading} onClick={createPostHandler} className="px-3" variant="primary">
-                                Post
-                            </Button>
-                        </div>
-                    </div>
                     {isLoading && <Loader />}
-                    {!postItems.length ? <div className="d-flex justify-content-center p-5"> <h6>Be the first one to post</h6> </div> : memoizedPostComponents}
+                    {!postItems.length ? <div className="d-flex justify-content-center p-5"> <h6>You have not posted any</h6> </div> : memoizedPostComponents}
                 </Col>
                 <Col md={3} className="class-3 my-3 pb-3">
                     <Card className="class-3-Card1">
@@ -161,4 +120,4 @@ const Post = () => {
     )
 }
 
-export default Post;
+export default MyPost;

@@ -9,6 +9,7 @@ import Register from './screens/register.jsx';
 import { Provider } from 'react-redux';
 import store from './store.js';
 import Post from './screens/posts.jsx';
+import MyPost from './screens/myPost.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
       <Route index={true} path='/' element={<Login />} />
       <Route path='/register' element={<Register />} />
       <Route path='/home' element={<Post />} />
+      <Route path='/myPost' element={<MyPost />} />
     </Route>
   )
 )

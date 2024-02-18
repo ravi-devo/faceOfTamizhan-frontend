@@ -25,6 +25,7 @@ const postSlice = createSlice({
             const { postId, comment } = action.payload;
             const post = state.postItems.find(post => post._id === postId);
             if (post) post.comments.push(comment);
+            post.comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         },
         deleteComment: (state, action) => {
             const { postId, commentId } = action.payload;
@@ -34,12 +35,12 @@ const postSlice = createSlice({
         likePost: (state, action) => {
             const { postId, userId } = action.payload;
             const post = state.postItems.find(post => post._id === postId);
-            if(post) post.likes.unshift(userId);
+            if (post) post.likes.unshift(userId);
         },
         dislikePost: (state, action) => {
             const { postId, userId } = action.payload;
             const post = state.postItems.find(post => post._id === postId);
-            if(post) post.likes = post.likes.filter(likedId => likedId != userId);
+            if (post) post.likes = post.likes.filter(likedId => likedId != userId);
         }
     }
 })
