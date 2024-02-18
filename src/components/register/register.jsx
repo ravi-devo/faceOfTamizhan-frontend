@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button, Container, Form, Row, Col } from "react-bootstrap";
+import { Button, Container, Form, Row, Col, InputGroup } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import { useRegisterMutation } from "../../slices/usersApiSlice";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from "react-redux";
 import { setCredential } from "../../slices/authSlice";
 import Loader from "../loader";
+import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -15,9 +16,19 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [city, setCity] = useState('');
-    const [country, setCountry] = useState('')
+    const [country, setCountry] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-    const [Register, {isLoading}] = useRegisterMutation();
+    const handleTogglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleToggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    };
+
+    const [Register, { isLoading }] = useRegisterMutation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -31,6 +42,8 @@ const Register = () => {
             if (!password) return toast.error("password is required");
             if (!confirmPassword) return toast.error("confirmPassword is required");
             if (password !== confirmPassword) return toast.error("Password and confirm password doesn't match.");
+            if(!city) return toast.error("City is required");
+            if(!country) return toast.error("Country is required");
             const res = await Register({ email, firstName, lastName, password, city, country }).unwrap();
             if (res.message === 'User registered successfully') {
                 dispatch(setCredential({ ...res }));
@@ -70,17 +83,30 @@ const Register = () => {
                         </Form.Label>
                         <Form.Control value={email} type="email" placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
                     </Form.Group>
-                    <Form.Group className="my-2 col-md-5" controlId="passwordControlId">
-                        <Form.Label>
-                            Password
-                        </Form.Label>
-                        <Form.Control value={password} type="password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} />
+                    <Form.Group className='my-2 col-md-5' controlId="formBasicPassword">
+                        <Form.Label>Password</Form.Label>
+                        <InputGroup>
+                            <Form.Control
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <InputGroup.Text onClick={handleTogglePasswordVisibility}>
+                                {showPassword ? <BsEyeSlash /> : <BsEye />}
+                            </InputGroup.Text>
+                        </InputGroup>
                     </Form.Group>
                     <Form.Group className='my-2 col-md-5' controlId="confirmPasswordControlId">
                         <Form.Label>
                             Confirm password
                         </Form.Label>
-                        <Form.Control value={confirmPassword} type="password" placeholder="Confirm password" onChange={(e) => setConfirmPassword(e.target.value)} />
+                        <InputGroup>
+                            <Form.Control value={confirmPassword} type={showConfirmPassword ? 'text' : 'password'} placeholder="Confirm password" onChange={(e) => setConfirmPassword(e.target.value)} />
+                            <InputGroup.Text onClick={handleToggleConfirmPasswordVisibility}>
+                                {showConfirmPassword ? <BsEyeSlash /> : <BsEye />}
+                            </InputGroup.Text>
+                        </InputGroup>
                     </Form.Group>
                     <Row>
                         <Col>

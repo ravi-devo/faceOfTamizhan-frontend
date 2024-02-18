@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, InputGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLoginMutation } from '../../slices/usersApiSlice';
 import { setCredential } from '../../slices/authSlice';
 import { toast } from 'react-toastify';
 import Loader from '../loader';
+import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -59,12 +65,17 @@ const Login = () => {
 
           <Form.Group className='my-2 col-md-5' controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <InputGroup>
+              <Form.Control
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <InputGroup.Text onClick={handleTogglePasswordVisibility}>
+                {showPassword ? <BsEyeSlash /> : <BsEye />}
+              </InputGroup.Text>
+            </InputGroup>
           </Form.Group>
 
           <Row className='py-1'>
