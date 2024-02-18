@@ -3,7 +3,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import './comment.css';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useDeleteCommentMutation } from "../slices/postApiSlice";
 import { deleteComment } from "../slices/postSlice";
 
@@ -11,6 +11,7 @@ const CommentsComponent = (props) => {
     const { postId, comment } = props;
     const [joinedTime, setJoinedTime] = useState('');
     const dispatch = useDispatch();
+    const {userInfo} = useSelector((state) => state.auth);
     const [deleteCommentAPI] = useDeleteCommentMutation();
 
     const calculateTimeSinceJoined = (createdAt) => {
@@ -63,10 +64,10 @@ const CommentsComponent = (props) => {
                             <span className="subtitle">{joinedTime}</span>
                         </div>
                     </div>
-                    <div onClick={deleteCommentHandler}>
+                    {comment.author._id.toString() == userInfo.data._id && <div className="comment-delete" onClick={deleteCommentHandler}>
                         <MdDeleteOutline size={18} />
                         <span className="mx-1 title">Delete</span>
-                    </div>
+                    </div>}
                 </div>
                 <Card.Text className="my-3 title">
                     {comment.text}

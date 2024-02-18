@@ -44,6 +44,10 @@
     color: white;
   }
 
+  .like-class, .comment-class, .delete-class{
+    cursor: pointer;
+  }
+
   .class-3{
     background-color: grey;
     color: white;

@@ -24,4 +24,8 @@
     display: inline-block;
 }
 
+.comment-delete{
+    cursor: pointer;
+}
+
   

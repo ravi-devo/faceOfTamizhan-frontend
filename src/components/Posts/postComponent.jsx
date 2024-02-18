@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import Avatar from "../avatar";
 import CommentsComponent from "../comment";
 import Loader from "../loader";
+import './posts.css';
 
 const PostComponent = ({ post }) => {
     const { userInfo } = useSelector((state) => state.auth);
@@ -127,18 +128,18 @@ const PostComponent = ({ post }) => {
             </Card.Body>
             <Card.Footer>
                 <div className="d-flex justify-content-between pb-2">
-                    <div onClick={handleLike}>
+                    <div className="like-class" onClick={handleLike}>
                         <AiFillLike color={liked ? 'blue' : 'white'} size={20} />
                         <span className="mx-1">{post.likes.length} Likes</span>
                     </div>
-                    <div onClick={() => setCommentExpanded(!commentExpanded)}>
+                    <div className="comment-class" onClick={() => setCommentExpanded(!commentExpanded)}>
                         <FaRegCommentAlt />
                         <span className="mx-2">{post.comments.length} Comments</span>
                     </div>
-                    <div onClick={deletePostHandler}>
+                    {post.author._id.toString() == currentUserId && <div className="delete-class" onClick={deletePostHandler}>
                         <MdDeleteOutline size={22} />
                         <span className="mx-1">Delete</span>
-                    </div>
+                    </div>}
                 </div>
                 {commentExpanded && (
                     <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
