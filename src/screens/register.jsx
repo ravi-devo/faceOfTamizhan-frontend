@@ -34,7 +34,6 @@ const Register = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        console.log('Submitted:', { email, password });
         try {
             if (!firstName) return toast.error("Firstname is required");
             if (!lastName) return toast.error("Lastname is required");
@@ -136,8 +135,6 @@ const Register = () => {
                     <Button className='px-5 mt-3' disabled={isLoading} type="submit">Sign Up</Button>
                 </Form>
             </div>
-
-
         </Container>
     )
 }

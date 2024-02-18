@@ -115,7 +115,6 @@ const MyPost = () => {
                     </Card>
                 </Col>
             </Row>
-
         </div>
     )
 }
