@@ -4,47 +4,67 @@ const POST_URL = 'api/posts';
 export const postApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getPost: builder.mutation({
-            query: () => ({
+            query: (token) => ({
                 url: `${POST_URL}/`,
-                method: 'GET'
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
             })
         }),
         createPost: builder.mutation({
-            query: (data) => ({
-                url: `${POST_URL}/`,
-                method: 'POST',
-                body: data
-            })
+            query: (args) => {
+                const { data, token } = args;
+                return {
+                    url: `${POST_URL}/`,
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: data
+                }
+            }
         }),
         getMyPost: builder.mutation({
-            query: () => ({
+            query: (token) => ({
                 url: `${POST_URL}/myPost`,
+                headers: { 'Authorization': `Bearer ${token}` },
                 method: 'GET'
             })
         }),
         deletePost: builder.mutation({
-            query: (postId) => ({
-                url: `${POST_URL}/${postId}`,
-                method: 'DELETE'
-            })
+            query: (args) => {
+                const {postId, token} = args;
+                console.log(`PostId: ${postId}`)
+                return {
+                    url: `${POST_URL}/${postId}`,
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    method: 'DELETE',
+                }
+            }
         }),
         like: builder.mutation({
-            query: (postId) => ({
-                url: `${POST_URL}/${postId}/like`,
-                method: 'POST'
-            })
+            query: (args) => {
+                const {postId, token} = args;
+                return {
+                    url: `${POST_URL}/${postId}/like`,
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    method: 'POST'
+                }
+            }
         }),
         dislike: builder.mutation({
-            query: (postId) => ({
-                url: `${POST_URL}/${postId}/dislike`,
-                method: 'POST'
-            })
+            query: (args) => {
+                const {postId, token} = args;
+                return{
+                    url: `${POST_URL}/${postId}/dislike`,
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    method: 'POST'
+                }  
+            }
         }),
         addComment: builder.mutation({
             query: (args) => {
-                const { postId, text } = args
+                const { postId, text, token } = args
                 return {
                     url: `${POST_URL}/${postId}/comment`,
+                    headers: { 'Authorization': `Bearer ${token}` },
                     method: 'POST',
                     body: text
                 }
@@ -52,9 +72,10 @@ export const postApiSlice = apiSlice.injectEndpoints({
         }),
         deleteComment: builder.mutation({
             query: (args) => {
-                const { postId, commentId } = args;
+                const { postId, commentId, token } = args;
                 return {
                     url: `${POST_URL}/${postId}/comment/${commentId}`,
+                    headers: { 'Authorization': `Bearer ${token}` },
                     method: 'DELETE'
                 }
             }

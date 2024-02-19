@@ -13,6 +13,7 @@ const CommentsComponent = (props) => {
     const dispatch = useDispatch();
     const {userInfo} = useSelector((state) => state.auth);
     const [deleteCommentAPI] = useDeleteCommentMutation();
+    const token = userInfo.token;
 
     const calculateTimeSinceJoined = (createdAt) => {
         const joinedDate = new Date(createdAt);
@@ -44,7 +45,7 @@ const CommentsComponent = (props) => {
     }, [comment.createdAt]);
 
     const deleteCommentHandler = async () => {
-        const res = await deleteCommentAPI({postId, commentId: comment._id}).unwrap();
+        const res = await deleteCommentAPI({postId, commentId: comment._id, token}).unwrap();
         if (res.message === 'Comment deleted successfully') {
             dispatch(deleteComment({postId, commentId: comment._id}));
             console.log(`Called in`)

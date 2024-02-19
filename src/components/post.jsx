@@ -32,15 +32,16 @@ const PostComponent = ({ post }) => {
     const [comment, setComment] = useState('');
     const [joinedTime, setJoinedTime] = useState('');
     const [commentExpanded, setCommentExpanded] = useState(false);
+    const token = userInfo.token;
 
     const handleLike = async () => {
         if (liked) {
-            const res = await disLikeAPI(post._id).unwrap();
+            const res = await disLikeAPI({postId, token}).unwrap();
             if (res.message === 'Post disliked successfully') {
                 dispatch(dislikePost({ postId, userId: currentUserId }));
             }
         } else {
-            const res = await likeAPI(post._id).unwrap();
+            const res = await likeAPI({postId, token}).unwrap();
             if (res.message === 'Post liked successfully') {
                 dispatch(likePost({ postId, userId: currentUserId }));
             }
@@ -50,7 +51,7 @@ const PostComponent = ({ post }) => {
 
     const addCommentHandler = async () => {
         if (comment.trim() !== '') {
-            const res = await addCommentAPI({ postId, text: { text: comment } }).unwrap();
+            const res = await addCommentAPI({ postId, text: { text: comment }, token }).unwrap();
             if (res.message === 'Comment added successfully') {
                 dispatch(addComment({ postId, comment: res.data }));
                 setComment('');
@@ -63,7 +64,7 @@ const PostComponent = ({ post }) => {
     }
 
     const deletePostHandler = async () => {
-        const res = await deletePostAPI(postId).unwrap();
+        const res = await deletePostAPI({postId, token}).unwrap();
         if (res.message === 'Post deleted successfully') {
             dispatch(deletePost(postId));
         } else {
@@ -105,7 +106,7 @@ const PostComponent = ({ post }) => {
         return sortedComments.map(comment => (
             <CommentsComponent postId={postId} comment={comment} key={comment._id} />
         ));
-    }, [postId]);
+    }, [postId, post.comments]);
 
     return (
         <Card className="postSpace mt-3">

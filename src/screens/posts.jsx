@@ -22,11 +22,12 @@ const Post = () => {
     const [GetPost, { isLoading }] = useGetPostMutation();
     const { postItems } = useSelector((state) => state.post);
     const { userInfo } = useSelector((state) => state.auth);
+    const token = userInfo.token;
 
     const createPostHandler = async () => {
         if (post.trim() != '') {
             try {
-                const res = await CreatePostAPI({ content: post }).unwrap();
+                const res = await CreatePostAPI({ data: {content: post}, token }).unwrap();
                 console.log(`Response ${JSON.stringify(res)}`)
                 if (res.message === 'Post Created successfully') {
                     console.log(`Post created successfully`)
@@ -67,7 +68,7 @@ const Post = () => {
     useEffect(() => {
         const getPostHandler = async () => {
             try {
-                const res = await GetPost().unwrap();
+                const res = await GetPost(token).unwrap();
                 if (res.message === 'Posts fetched successfully') {
                     dispatch(setInitialPost(res.data));
                 }
@@ -101,7 +102,7 @@ const Post = () => {
                     <span className="mx-1">{userInfo.data.name}</span>
                     <div className="divider"></div>
                     <Row className="d-flex px-2 justify-content-between"><Col>Joined</Col><Col>{joinedTime}</Col></Row>
-                    <div className="m-1"><CiLocationOn size={25} /> <span>Chennai, India</span></div>
+                    <div className="m-1"><CiLocationOn size={25} /> <span>{userInfo.data.place}</span></div>
                     <div className="m-1 px-1"><GoBriefcase size={20} /> <span>Software Engineer</span></div>
                     <div className="divider my-3"></div>
                     <div className="px-1">

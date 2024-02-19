@@ -20,6 +20,7 @@ const MyPost = () => {
     const [GetMyPost, { isLoading }] = useGetMyPostMutation();
     const { postItems } = useSelector((state) => state.post);
     const { userInfo } = useSelector((state) => state.auth);
+    const token = userInfo.token;
 
     const calculateTimeSinceJoined = (createdAt) => {
         const joinedDate = new Date(createdAt);
@@ -47,7 +48,7 @@ const MyPost = () => {
     useEffect(() => {
         const getMyPostHandler = async () => {
             try {
-                const res = await GetMyPost().unwrap();
+                const res = await GetMyPost(token).unwrap();
                 if (res.message === 'Your posts fetched successfully') {
                     dispatch(getMyPost(res.data));
                 }
@@ -79,7 +80,7 @@ const MyPost = () => {
                     <span className="mx-1">{userInfo.data.name}</span>
                     <div className="divider"></div>
                     <Row className="d-flex px-2 justify-content-between"><Col>Joined</Col><Col>{joinedTime}</Col></Row>
-                    <div className="m-1"><CiLocationOn size={25} /> <span>Chennai, India</span></div>
+                    <div className="m-1"><CiLocationOn size={25} /> <span>{userInfo.data.place}</span></div>
                     <div className="m-1 px-1"><GoBriefcase size={20} /> <span>Software Engineer</span></div>
                     <div className="divider my-3"></div>
                     <div className="px-1">

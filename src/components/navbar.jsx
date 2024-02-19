@@ -17,10 +17,11 @@ const Header = () => {
 
   const [LogoutAPI] = useLogoutMutation();
   const { userInfo } = useSelector((state) => state.auth);
+  const token = userInfo.token;
 
   const logoutHandler = async () => {
     try {
-      const res = await LogoutAPI().unwrap();
+      const res = await LogoutAPI(token).unwrap();
       if (res.message === "Logout successful.") {
         console.log(`Came in`)
         dispatch(logOut());

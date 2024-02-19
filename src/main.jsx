@@ -10,14 +10,18 @@ import { Provider } from 'react-redux';
 import store from './store.js';
 import Post from './screens/posts.jsx';
 import MyPost from './screens/myPost.jsx';
+import PrivateRoute from './components/privateRoute.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<Login />} />
       <Route path='/register' element={<Register />} />
-      <Route path='/home' element={<Post />} />
-      <Route path='/myPost' element={<MyPost />} />
+      {/* PRIVATE ROUTE */}
+      <Route path='' element={<PrivateRoute />}>
+        <Route path='/home' element={<Post />} />
+        <Route path='/myPost' element={<MyPost />} />
+      </Route>
     </Route>
   )
 )
